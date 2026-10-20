@@ -312,6 +312,18 @@
       line-height: 1.6;
     }
 
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
     .result .primary-button { min-width: 170px; }
 
     .footer-note {
@@ -376,6 +388,7 @@
         <p class="reaction" id="reaction" aria-hidden="true"></p>
         <h1 id="result-title" tabindex="-1">Mission complete!</h1>
         <p class="result-score" id="result-score"></p>
+        <p class="sr-only" id="result-announcement" role="status" aria-live="polite" aria-atomic="true"></p>
         <p class="result-copy" id="result-copy"></p>
         <button class="primary-button" id="restart-button" type="button">Play again <span aria-hidden="true">↻</span></button>
       </div>
@@ -459,6 +472,7 @@
       const feedback = document.querySelector("#feedback");
       const nextButton = document.querySelector("#next-button");
       const resultTitle = document.querySelector("#result-title");
+      const resultAnnouncement = document.querySelector("#result-announcement");
       let questionIndex = 0;
       let score = 0;
       let answered = false;
@@ -529,6 +543,7 @@
         quiz.hidden = true;
         result.hidden = false;
         reaction.textContent = resultData[0];
+        resultAnnouncement.textContent = `Final score: ${score} out of ${questions.length}.`;
         resultScore.textContent = `0 / ${questions.length}`;
         if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || score === 0) {
           resultScore.textContent = `${score} / ${questions.length}`;
@@ -566,6 +581,7 @@
         questionIndex = 0;
         score = 0;
         scoreDisplay.textContent = "0";
+        resultAnnouncement.textContent = "";
         result.hidden = true;
         quiz.hidden = false;
         renderQuestion();
